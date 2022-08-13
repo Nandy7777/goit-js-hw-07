@@ -3,7 +3,10 @@ import { galleryItems } from './gallery-items.js';
 
 const galleryContainer = document.querySelector(`.gallery`); 
 const galleryImages = createGallleryItems(galleryItems);
+
 galleryContainer.insertAdjacentHTML('beforeend', galleryImages);
+
+galleryContainer.addEventListener(`click`, onGalleryContainerClick);
 
 function createGallleryItems(galleryItems) {  
   return galleryItems
@@ -20,22 +23,32 @@ function createGallleryItems(galleryItems) {
                 </div>`;
         })
       .join(``);
-    
-    
 };
 
-galleryContainer.addEventListener(`click`, onGalleryContainerClick);
 function onGalleryContainerClick(evt) {
     evt.preventDefault();
+
+    if (!evt.target.classList.contains(`gallery__image`)) {
+        return;
+    }
     console.log(evt.target.dataset.source);
 
+    // const currentActiveImg = document.querySelector(`.gallery__item.is-active`);
+    // if (currentActiveImg) {
+    //   currentActiveImg.classList.remove(`is-active`);
+    // }
+
+    // const swatchEl = evt.target;
+    // const parentImg = swatchEl.closest(`.gallery__item`);
+    // parentImg.classList.add(`is-active`);
+
+    const selectedImage = evt.target.getAttribute("data-source");
+    const instance = basicLightbox.create(`
+    <img src="${selectedImage}"  width="800" height="600">`);
+    instance.show();
     
+    const visible = basicLightbox.visible();
+    console.log(visible);
 }
-
-const instance = basicLightbox.create(`
-    <img src="${original}" width="800" height="600">
-    `);
-
-instance.show();
 
 console.log(galleryItems);
